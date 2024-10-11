@@ -14,14 +14,14 @@ public class Screening {
 
     @ManyToOne
     @JoinColumn(name = "film_id")
-    private Movie movie; // Filmen som visas vid denna föreställning.
+    private Movie movie;
 
-    @ManyToOne
-    @JoinColumn(name = "venue_id")
-    private Venue venue; // Lokalen där föreställningen hålls.
+    @Enumerated(EnumType.STRING)
+    @Column(name = "venue")
+    private Venue venue;
 
     @Column(name="screening_time")
-    private LocalDateTime screeningTime; // Tid för föreställningen.
+    private LocalDateTime screeningTime;
 
     public Screening(Movie movie, Venue venue, LocalDateTime screeningTime) {
         this.movie = movie;

@@ -22,6 +22,15 @@ public class CustomerController {
         return customerService.findAll();
     }
 
+    @GetMapping("/v1/customers/{id}")
+    public Customer getCustomer (@PathVariable int id) {
+        Customer customer = customerService.findById(id);
+        if (customer == null) {
+            throw new RuntimeException("Kund med id " + id + " hittades inte.");
+        }
+        return customer;
+    }
+
     @PostMapping("/v1/customers")
     public Customer addCustomer(@RequestBody Customer c) {
         c.setId(0);

@@ -1,6 +1,10 @@
 package org.sandstrom.wigellcinema.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -24,6 +28,7 @@ public class Address {
     private String city;
 
     @OneToMany(mappedBy = "address")
+   // @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Customer> residents;
 
 

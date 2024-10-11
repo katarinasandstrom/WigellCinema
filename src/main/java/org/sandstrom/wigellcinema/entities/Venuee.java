@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table
-public class Venue {
+public class Venuee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +30,10 @@ public class Venue {
     @OneToMany(mappedBy = "venue")
     private List<Screening> screenings; // Lista över föreställningar som hålls i lokalen.
 
-    public Venue(){
+    public Venuee(){
 
     }
-    public Venue(String name, int maxNoOfGuests, List<Facility> facilities, List<Screening> screenings) {
+    public Venuee(String name, int maxNoOfGuests, List<Facility> facilities, List<Screening> screenings) {
         this.name = name;
         this.maxNoOfGuests = maxNoOfGuests;
         this.facilities = facilities;

@@ -1,5 +1,6 @@
 package org.sandstrom.wigellcinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -18,12 +19,13 @@ public class BookingCVenue {
     @Column(name="nr_of_guests")
     private int nrOfGuests;
 
-    @ManyToOne
-    @JoinColumn(name = "venue_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "venue")
     private Venue venue;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false) // Referens till kunden som gör bokningen
+    @JoinColumn(name = "customer_id", nullable = false)
+    @JsonBackReference
     private Customer customer;
 
     @Column(name="entertainment")

@@ -1,5 +1,11 @@
 package org.sandstrom.wigellcinema.entities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,11 +46,13 @@ public class Customer {
     @Column(name = "cinema_ticket_bookings")
     private List<BookingCTicket> cinemaTicketBookings;
 
-    @OneToMany
-    @Column(name = "cinema_venue_bookings")
-    private List<BookingCVenue> cinemaVenueBookings;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<BookingCVenue> cinemaVenueBookings = new ArrayList<>();
 
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JoinColumn(name = "address_id")
     private Address address;
 
