@@ -37,7 +37,7 @@ public class BookingCVenue {
     @Column(name = "total_price_in_SEK")
     private BigDecimal totalPriceSEK;
 
-    @Transient
+    @Column (name = "total_price_in_USD")
     private BigDecimal totalPriceUSD;
 
 
