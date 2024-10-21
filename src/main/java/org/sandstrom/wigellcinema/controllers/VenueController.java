@@ -18,25 +18,21 @@ public class VenueController {
     public VenueController(VenueService venueSer){
         venueService = venueSer;
     }
-    @GetMapping("/v1/rooms")
+    @GetMapping("/v1/cinema/rooms")
     public List<Venue> findAll(){
         return venueService.findAll();
     }
 
-    @GetMapping("/v1/rooms/{id}")
+    @GetMapping("/v1/cinema/rooms/{id}")
     public Venue getVenue (@PathVariable int id) {
         Venue venue = venueService.findById(id);
-        if (venue == null) {
-            throw new RuntimeException("Lokal med id " + id + " hittades inte.");
-        }
         return venue;
     }
-    @PutMapping("/v1/rooms/{id}")
-    public Venue venue(@PathVariable int id, @RequestBody Venue v) {
-        // Hämta den befintliga kunden
-         Venue existingVenue = venueService.findById(id);
 
-        // Uppdatera fälten i den befintliga kunden
+    @PutMapping("/v1/cinema/rooms/{id}")
+    public Venue venue(@PathVariable int id, @RequestBody Venue v) {
+        Venue existingVenue = venueService.findById(id);
+
         existingVenue.setName(v.getName());
         existingVenue.setMaxNoOfGuests(v.getMaxNoOfGuests());
         existingVenue.setFacilities(v.getFacilities());

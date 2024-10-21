@@ -4,6 +4,8 @@ import org.sandstrom.wigellcinema.dao.CustomerRepository;
 import org.sandstrom.wigellcinema.dao.MovieRepository;
 import org.sandstrom.wigellcinema.entities.Customer;
 import org.sandstrom.wigellcinema.entities.Movie;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import java.util.Optional;
 @Service
 public class MovieServiceImpl implements MovieService{
 
-
+    private static final Logger logger = LoggerFactory.getLogger(MovieServiceImpl.class);
 
     private MovieRepository movieRepository;
 
@@ -24,6 +26,7 @@ public class MovieServiceImpl implements MovieService{
 
    @Override
    public List<Movie> findAll() {
+       logger.info("All movies was listed.");
        return movieRepository.findAll();
    }
 
@@ -34,18 +37,31 @@ public class MovieServiceImpl implements MovieService{
        if (m.isPresent()) {
            movie = m.get();
        } else {
-           throw new RuntimeException("Film med id " + id + " hittades inte.");
+           throw new RuntimeException("Movie with " + id + " could not be found.");
        }
-       return movie;
+       logger.info("Movie with id " + id + " was listed.");
+   return movie;
    }
 
    @Override
    public Movie save (Movie movie){
+       String savedMovie = movieRepository.save(movie).getTitle();
+       logger.info("Movie " + savedMovie+ " was added by admin.");
        return movieRepository.save(movie);
    }
 
    @Override
    public void deleteById(int id) {
-       movieRepository.deleteById(id);
+
+       Optional <Movie> optionalMovie = movieRepository.findById(id);
+
+       if(optionalMovie.isPresent()){
+           Movie movieToDelete = optionalMovie.get();
+           movieRepository.deleteById(id);
+           logger.info("Movie " + movieToDelete.getTitle() + " was deleted by admin." );
+       }
+       else {
+           logger.warn("Attempted to delete movie with id " + id + " but it was not found.");
+       }
    }
 }

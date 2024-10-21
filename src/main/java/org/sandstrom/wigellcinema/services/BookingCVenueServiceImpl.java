@@ -12,9 +12,12 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 public class BookingCVenueServiceImpl implements BookingCVenueService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BookingCVenueServiceImpl.class);
 
     @Autowired
     private BookingCVenueRepository bookingCVenueRepository;
@@ -24,6 +27,7 @@ public class BookingCVenueServiceImpl implements BookingCVenueService {
 
     @Override
     public List<BookingCVenue> findAllBookingsByCustomerId(int customerId) {
+        logger.info("All venue bookings made by customer with id " + customerId + " was listed.");
         return bookingCVenueRepository.findByCustomerId(customerId);
     }
 
@@ -35,17 +39,18 @@ public class BookingCVenueServiceImpl implements BookingCVenueService {
             bookingCVenue = b.get();
         }
         else{
-            throw new RuntimeException("Bokning med id " + id + " hittades inte.");
+            throw new RuntimeException("Booking with id  " + id + " could not be found.");
         }
+        logger.info("Cinema venue booking with id " + id + " was listed.");
         return bookingCVenue;
     }
 
     @Override
     public BookingCVenue save(BookingCVenue bookingCVenue) {
         BigDecimal priceInUSD = calculatePriceInUSD(bookingCVenue.getTotalPriceSEK());
-        System.out.println("Priset i USD är " + priceInUSD);
         bookingCVenue.setTotalPriceUSD(priceInUSD);
 
+        logger.info("New cinema venue booking was made.");
         return bookingCVenueRepository.save(bookingCVenue);
     }
 
@@ -62,7 +67,9 @@ public class BookingCVenueServiceImpl implements BookingCVenueService {
             BigDecimal sekRate = exchangeRate.getRate("SEK");
             if (usdRate != null && sekRate != null) {
                 BigDecimal priceInUSD = priceInSEK.divide(sekRate, 4, BigDecimal.ROUND_HALF_UP).multiply(usdRate);
-                return priceInUSD.setScale(2, BigDecimal.ROUND_HALF_UP);
+                priceInUSD = priceInUSD.setScale(2, BigDecimal.ROUND_HALF_UP);
+                logger.info("Price in SEK " + priceInSEK + " was converted to USD " + priceInUSD + ".");
+                return priceInUSD;
             }
         }
 

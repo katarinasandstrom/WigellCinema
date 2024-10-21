@@ -1,6 +1,7 @@
 package org.sandstrom.wigellcinema.controllers;
 
 import org.sandstrom.wigellcinema.entities.Customer;
+import org.sandstrom.wigellcinema.entities.Movie;
 import org.sandstrom.wigellcinema.services.CustomerService;
 import org.sandstrom.wigellcinema.services.CustomerServiceImpl;
 import org.springframework.web.bind.annotation.*;
@@ -17,37 +18,35 @@ public class CustomerController {
         customerService = customerSer;
     }
 
-    @GetMapping("/v1/customers")
+    @GetMapping("/v1/cinema/customers")
     public List<Customer>findAll(){
         return customerService.findAll();
     }
 
-    @GetMapping("/v1/customers/{id}")
+    @GetMapping("/v1/cinema/customers/{id}")
     public Customer getCustomer (@PathVariable int id) {
         Customer customer = customerService.findById(id);
         if (customer == null) {
-            throw new RuntimeException("Kund med id " + id + " hittades inte.");
+            throw new RuntimeException("Customer with id " + id + " was not found.");
         }
         return customer;
     }
 
-    @PostMapping("/v1/customers")
+    @PostMapping("/v1/cinema/customers")
     public Customer addCustomer(@RequestBody Customer c) {
         c.setId(0);
         return customerService.save(c);
     }
 
-    @DeleteMapping ("v1/customers/{id}")
+    @DeleteMapping ("v1/cinema/customers/{id}")
     public String deleteCustomer(@PathVariable int id){
        Customer customer = customerService.findById(id);
-       if (customer == null){
-           throw new RuntimeException("Kund med id: " + id + " hittades inte.");
-       }
        customerService.deleteById(id);
-       return "Kund med id: " + id + " är raderad.";
+       return "Customer with id : " + id + " is deleted.";
     }
 
-    @PutMapping("/v1/customers/{id}")
+
+    @PutMapping("/v1/cinema/customers/{id}")
     public Customer updateCustomer(@PathVariable int id, @RequestBody Customer c) {
         // Hämta den befintliga kunden
         Customer existingCustomer = customerService.findById(id);

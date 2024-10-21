@@ -35,7 +35,7 @@ public class VenueServiceImpl implements VenueService{
             venue = v.get();
         }
         else{
-            throw new RuntimeException("Lokal med id " + id + " hittades inte.");
+            throw new RuntimeException("Venue with id  " + id + " was not found.");
         }
         return venue;
     }

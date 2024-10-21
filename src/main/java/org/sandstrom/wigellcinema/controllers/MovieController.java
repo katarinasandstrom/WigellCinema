@@ -32,24 +32,17 @@ public class MovieController {
     @DeleteMapping ("v1/movies/{id}")
     public String deleteMovie(@PathVariable int id){
         Movie movie = movieService.findById(id);
-        if (movie == null){
-            throw new RuntimeException("Film med id: " + id + " hittades inte.");
-        }
         movieService.deleteById(id);
-        return "Film med id: " + id + " är raderad.";
+        return "Movie with id " + id + " is deleted.";
     }
     @PutMapping("/v1/movies/{id}")
     public Movie updateMovie(@PathVariable int id, @RequestBody Movie m) {
-        // Hämta den befintliga kunden
         Movie existingMovie = movieService.findById(id);
 
-        // Uppdatera fälten i den befintliga kunden
         existingMovie.setTitle(m.getTitle());
         existingMovie.setLength(m.getLength());
         existingMovie.setGenre(m.getGenre());
         existingMovie.setAgeLimit(m.getAgeLimit());
-        //adress
-
 
         return movieService.save(existingMovie);
     }

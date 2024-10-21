@@ -2,6 +2,7 @@ package org.sandstrom.wigellcinema.security;
 
 import jakarta.persistence.Column;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,10 +25,15 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 
+@EnableWebSecurity
 @Configuration
 
 public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
+    public SecurityConfig() {
+        logger.info("SecurityConfig instantiated");
+    }
 
     //    @Bean
 //    public PasswordEncoder passwordEncoder() {
@@ -50,16 +56,8 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/wigellsdb?useSSL=false&serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("400Lingon!");
-        return dataSource;
-
-    }
+    @Autowired
+    private DataSource dataSource;
 
 
     @Bean
@@ -72,13 +70,16 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/movies").hasAnyRole("USER", "ADMIN")
 
-                                .requestMatchers(HttpMethod.GET, "/api/v1/customers").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/v1/customers").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/v1/customers/*").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/api/v1/customers/*").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/cinema/customers").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/cinema/customers").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/cinema/customers/*").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/cinema/customers/*").hasRole("ADMIN")
+
                                 .requestMatchers(HttpMethod.POST, "/api/v1/movies").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/movies/*").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/api/v1/rooms/*").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/movies/*").hasRole("ADMIN")
+
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/cinema/rooms/*").hasRole("ADMIN")
 
                                 .anyRequest().authenticated()
                 )
