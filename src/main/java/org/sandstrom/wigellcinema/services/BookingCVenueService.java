@@ -9,7 +9,7 @@ public interface BookingCVenueService {
 
     public List<BookingCVenue> findAllBookingsByCustomerId(int customerId);
 
-//    BookingCVenue findById(int id);
+    BookingCVenue findById(int id);
 
     BookingCVenue save(BookingCVenue bookingCVenue);
 

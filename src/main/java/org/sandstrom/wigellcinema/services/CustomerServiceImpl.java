@@ -3,6 +3,7 @@ package org.sandstrom.wigellcinema.services;
 import org.sandstrom.wigellcinema.dao.CustomerRepository;
 import org.sandstrom.wigellcinema.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService{
 
     private CustomerRepository customerRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRep){
@@ -33,10 +35,18 @@ public class CustomerServiceImpl implements CustomerService{
         }
         return customer;
     }
+//    @Override
+//    public Customer save (Customer customer){
+//        String encodedPassword = passwordEncoder.encode(customer.getPassword());
+//        customer.setPassword(encodedPassword);
+//        return customerRepository.save(customer);
+//    }
+
     @Override
     public Customer save (Customer customer){
         return customerRepository.save(customer);
     }
+
 
     @Override
     public void deleteById(int id){

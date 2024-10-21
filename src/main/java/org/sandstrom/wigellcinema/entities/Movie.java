@@ -3,7 +3,7 @@ package org.sandstrom.wigellcinema.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table
+@Table (name = "movie")
 public class Movie {
 
 

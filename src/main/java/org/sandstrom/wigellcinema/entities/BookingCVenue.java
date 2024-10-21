@@ -1,13 +1,14 @@
 package org.sandstrom.wigellcinema.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table (name = "booking_c_venue")
 public class BookingCVenue {
 
     @Id
@@ -19,13 +20,14 @@ public class BookingCVenue {
     @Column(name="nr_of_guests")
     private int nrOfGuests;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "venue")
+    @ManyToOne
+    @JoinColumn(name = "venue_id")
+//    @JsonManagedReference
     private Venue venue;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonBackReference
+//    @JsonBackReference
     private Customer customer;
 
     @Column(name="entertainment")

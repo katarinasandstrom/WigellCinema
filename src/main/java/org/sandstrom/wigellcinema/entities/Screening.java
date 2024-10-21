@@ -16,8 +16,8 @@ public class Screening {
     @JoinColumn(name = "film_id")
     private Movie movie;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "venue")
+    @ManyToOne
+    @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
     @Column(name="screening_time")

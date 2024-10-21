@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "customer")
@@ -15,6 +16,14 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
+    @Column (name="enabled", nullable= false)
+    private boolean enabled= true;
+
+    @PrePersist
+    protected void onCreate() {
+        this.enabled = true;  // se till att det är true vid ny sparning om det inte redan är satt
+    }
 
     @Column(name = "first_name", length = 45)
     private String firstName;
@@ -38,7 +47,7 @@ public class Customer {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", length = 30)
     private Role role;
 
     @OneToMany
@@ -46,7 +55,7 @@ public class Customer {
     private List<BookingCTicket> cinemaTicketBookings;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<BookingCVenue> cinemaVenueBookings = new ArrayList<>();
 
 
@@ -58,9 +67,10 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String phoneNumber,
+    public Customer(boolean enabled, String firstName, String lastName, String phoneNumber,
                     String dateOfBirth, String email, String username,
                     String password, Role role, Address address) {
+        this.enabled = enabled;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -80,6 +90,13 @@ public class Customer {
         this.id = id;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -156,6 +173,7 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id=" + id +
+                "enabled =" + enabled +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +

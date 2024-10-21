@@ -4,12 +4,14 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import jakarta.servlet.ServletOutputStream;
 import org.sandstrom.wigellcinema.dao.BookingCVenueRepository;
 import org.sandstrom.wigellcinema.entities.BookingCVenue;
+import org.sandstrom.wigellcinema.entities.Customer;
 import org.sandstrom.wigellcinema.models.ExchangeRateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingCVenueServiceImpl implements BookingCVenueService {
@@ -23,6 +25,19 @@ public class BookingCVenueServiceImpl implements BookingCVenueService {
     @Override
     public List<BookingCVenue> findAllBookingsByCustomerId(int customerId) {
         return bookingCVenueRepository.findByCustomerId(customerId);
+    }
+
+    @Override
+    public BookingCVenue findById(int id){
+            Optional<BookingCVenue> b = bookingCVenueRepository.findById(id);
+        BookingCVenue bookingCVenue = null;
+        if(b.isPresent()){
+            bookingCVenue = b.get();
+        }
+        else{
+            throw new RuntimeException("Bokning med id " + id + " hittades inte.");
+        }
+        return bookingCVenue;
     }
 
     @Override
